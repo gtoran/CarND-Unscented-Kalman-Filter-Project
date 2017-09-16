@@ -100,7 +100,7 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
     if (!is_initialized_) {
       // Our flow here consists of initializing on the first measurement...
 
-      x_ << 1, 1, 1, 1, 0.1;
+      x_ << 0, 0, 0, 0, 0;
       
       // init covariance matrix
       P_ << 0.15,    0, 0, 0, 0,
@@ -172,25 +172,6 @@ void UKF::Prediction(double delta_t) {
   */
 
   // Let's start with sigma point prediction. The lesson covers this very well.
-
-  //define spreading parameter (for sigma point matrix)
-  lambda_ = 3 - n_x_;
-
-  //create sigma point matrix
-  MatrixXd Xsig = MatrixXd(n_x_, 2 * n_x_ + 1);
-
-  //calculate square root of P
-  MatrixXd A = P_.llt().matrixL();
-
-  //set first column of sigma point matrix
-  Xsig.col(0)  = x_;
-
-  //set remaining sigma points
-  for (int i = 0; i < n_x_; i++)
-  {
-    Xsig.col(i+1)     = x_ + sqrt(lambda_+n_x_) * A.col(i);
-    Xsig.col(i+1+n_x_) = x_ - sqrt(lambda_+n_x_) * A.col(i);
-  }
 
   // Augment sigma points...
 
